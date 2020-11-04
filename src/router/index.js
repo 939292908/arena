@@ -35,62 +35,6 @@ class Router {
             onmatch: function () {
                 return import('@/views/page/main/shareH5/rankingShareH5/rankingShareH5.view');
             }
-        },
-        // // 发红包
-        // '/sendRedPacket': {
-        //     // 是否需要需要身份验证
-        //     requireAuth: false,
-        //     onmatch: function () {
-        //         return import('@/views/page/sendRedPacket/sendRedPacket.view');
-        //     }
-        // },
-        // 领取红包
-        '/receiveRedPacket': {
-            // 是否需要需要身份验证
-            requireAuth: false,
-            onmatch: function () {
-                return import('@/views/page/receiveRedPacket/receiveRedPacket.view');
-            }
-        },
-        // 领取红包结果
-        '/receiveResult': {
-            // 是否需要需要身份验证
-            requireAuth: false,
-            onmatch: function () {
-                return import('@/views/page/receiveRedPacket/receiveResult/receiveResult.view');
-            }
-        },
-        // 我的红包
-        '/myRedPacket': {
-            // 是否需要需要身份验证
-            requireAuth: false,
-            onmatch: function () {
-                return import('@/views/page/myRedPacket/myRedPacket.view');
-            }
-        },
-        // 发的红包详情
-        '/sendRedPacketDetail': {
-            // 是否需要需要身份验证
-            requireAuth: false,
-            onmatch: function () {
-                return import('@/views/page/myRedPacket/sendRedPacketDetail/sendRedPacketDetail.view');
-            }
-        },
-        // 领的红包详情
-        '/receiveRedPacketDetail': {
-            // 是否需要需要身份验证
-            requireAuth: false,
-            onmatch: function () {
-                return import('@/views/page/myRedPacket/receiveRedPacketDetail/receiveRedPacketDetail.view');
-            }
-        },
-        // h5分享红包
-        '/shareH5': {
-            // 是否需要需要身份验证
-            requireAuth: false,
-            onmatch: function () {
-                return import('@/views/page/sendRedPacket/shareH5/shareH5.view');
-            }
         }
     };
 

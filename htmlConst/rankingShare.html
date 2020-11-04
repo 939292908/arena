@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试分享图片生成</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            font-family: "Arial";
+            font-style: normal;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            line-height: 1.5;
+            background-color: #191D28;
+            color: #9EA2AF;
+            background: url("../src/assets/img/arena/rankingShareBg.png") center 120px no-repeat #191D28;
+            background-size: contain;
+        }
+        .title-1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 42px;
+            margin-top: 38px;
+            color: #F8F8F8;
+            text-align: center;
+        }
+        .title-2 {
+            font-size: 14px;
+            margin-top: 4px;
+            text-align: center;
+        }
+        .body-1 {
+            font-size: 12px;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .text-right {
+            text-align: left;
+        }
+        .info {
+            margin-top: 236px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 36px;
+            padding-bottom: 64px;
+        }
+        .info-text {
+            font-size: 24px;
+            color: #fff;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+        .footer {
+            padding: 20px;
+            background: #1E2330;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-1">合约大师竞技场</div> 
+    <div class="title-2">快和我一起参赛，盈收益！</div>
+    <div class="info">
+        <div class="text-left">
+            <div class="body-1">我的排名</div>
+            <div class="info-text">未上榜</div>
+        </div>
+        <div class="text-right">
+            <div class="body-1">净盈亏(BMUT)</div>
+            <div class="info-text">100.1234</div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-left">
+            <img class="footer-right" src="../src/assets/img/arena/logo.png" width="69px" alt="">
+            <div class="body-1">邀请您加入，长按识别二维码</div>
+        </div>
+        <img class="footer-right" src="../src/assets/img/arena/ewm.png" width="48px" height="48px" alt=""> 
+    </div>
+    <!-- <img class="ewm" src="../src/assets/img/arena/ewm.png" width="148px" alt=""> -->
+</body>
+</html>

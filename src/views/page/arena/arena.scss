@@ -1,0 +1,121 @@
+.view-arena {
+    
+    .view-arena-content {
+
+        .view-arena-content-inner {
+            background: url("~@/assets/img/arena/bg.png") no-repeat center top;
+            background-size: contain;
+            padding: 0 17px;
+
+                .view-arena-top {
+                    overflow: hidden;
+                    
+                    .view-arena-top-number {
+                        font-size: 82px;
+                        line-height: 1;
+                    }
+                    .view-arena-top-barrage {
+                        margin-top: 76px;
+                        height: 100px;
+                    }
+                }
+                
+                .view-arena-info {
+                    border: 4px solid #2E3346;
+                    border-radius: 10px;
+                    background: rgba(45, 52, 71, 0.4);
+                    backdrop-filter: blur(10px);
+
+                    .view-arena-info-line-box {
+                        border-left: 1px dashed #E60023;
+                        position: relative;
+
+                        &::before {
+                            content: "";
+                            display: block;
+                            position: absolute;
+                            background-color: #fff;
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                            border: 2px solid #97A0B9;
+                            left: 0;
+                            top: 0;
+                            transform: translate(-50%, 80%);
+                            z-index: 1;
+                        }
+                        &::after {
+                            content: "";
+                            display: block;
+                            position: absolute;
+                            background-color: #1F2531;
+                            width: 4px;
+                            height: 20px;
+                            left: 0;
+                            top: 0;
+                            transform: translate(-50%, 0%);
+                        }
+                        &.line-box-pass {
+                            &::before {
+                                border: 2px solid #E60023;
+                            }
+                        }
+                    }
+                    
+                    .view-arena-resurrection {
+                        border: 2px solid #1A488E;
+                        border-radius: 7px;
+                        width: 96px;
+                        height: 96px;
+                        margin: 0 auto;
+                    }
+                }
+            
+                .view-arena-toolbar {
+                    position: fixed;
+                    right: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+
+                    .view-arena-toolbar-item {
+                        width: 40px;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        border-radius: 50%;
+                    }
+                }
+        }
+    }
+
+    .view-arena-footer {
+        padding: 0 17px;
+    }
+}
+
+.my-confirm-modal-content {
+    background-color: #fff;
+    width: 70%;
+
+    .my-confirm-modal-header {
+        color: #212941;
+    }
+
+    .my-confirm-modal-body {
+        // color: #9EA2AF;
+    }
+}
+
+.pub-danmaku {
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    border-radius: 15px;
+    background: rgba(33, 38, 53, 0.8);
+
+    .pub-danmaku-user {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+    }
+}

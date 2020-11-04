@@ -1,0 +1,37 @@
+.view-ranking {
+    
+    .view-ranking-content {
+
+        background: url("~@/assets/img/arena/bg.png") no-repeat center top;
+        background-size: contain;
+        padding: 0 17px;
+        display: flex;
+        flex-direction: column;
+
+            .view-ranking-top {
+                overflow: hidden;
+                padding-bottom: 53px;
+                
+                .view-ranking-top-number {
+                    font-size: 40px;
+                    line-height: 1;
+                }
+                .view-ranking-top-title {
+                    font-size: 32px;
+                }
+            }
+            
+            .view-ranking-info {
+                border: 4px solid #2E3346;
+                border-radius: 10px;
+                background: rgba(45, 52, 71, 0.4);
+                backdrop-filter: blur(10px);
+                flex: 1;
+                
+                .view-ranking-info-body {
+                    flex: 1 1 0px;
+                    overflow: auto;
+                }
+            }
+        }
+}

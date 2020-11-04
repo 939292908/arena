@@ -1,0 +1,45 @@
+.arena-share-h5 {
+    min-height: 100%;
+    background: url("~@/assets/img/arena/arenaShareBgH5.png") center 160px / contain no-repeat #191D28;
+    iframe {
+        width: 322px;
+        height: 271px;
+    }
+
+    .share-h5-link-box {
+        background: #222736;
+        margin-top: 380px !important;
+
+        .share-h5-link-content {
+            position: relative;
+            background-color: #252B3C;
+
+            &::before,
+            &::after {
+                content: "";
+                display: block;
+                width: 8px;
+                height: 8px;
+                background-color:#222736;
+                position: absolute;
+                top: 50%;
+                border-radius: 4px;
+                
+            }
+
+            &::before {
+                left: 0;
+                transform: translateX(-50%) translateY(-50%);
+            }
+
+            &::after {
+                right: 0;
+                transform: translateX(50%) translateY(-50%);
+            }
+
+            .share-h5-link {
+                overflow: hidden;
+            }
+        }
+    }
+}

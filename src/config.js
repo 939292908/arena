@@ -1,9 +1,9 @@
 module.exports = {
-    exchId: 3,
-    official: 'https://www.lfsx.link', // 平台官网地址
-    exchName: 'LFSX',
-    exchNameCapital: 'LFSX',
-    DOCTitle: "LFSX",
+    exchId: 26,
+    official: 'https://www.bmex.vip', // 平台官网地址
+    exchName: 'BMEX',
+    exchNameCapital: 'BMEX',
+    DOCTitle: "BMEX",
     DOCTitleEn: "",
     themeDark: false,
     future: {
@@ -14,7 +14,7 @@ module.exports = {
     // exchInfo: {
     //     helpCenter: {
     //         langs: { zh: "zh-cn", tw: "zh-cn", en: "en-001" },
-    //         website: "https://gmex-help.zendesk.com"
+    //         website: "https://support.bmex.vip"
     //     }
     // }
 };

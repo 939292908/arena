@@ -221,13 +221,14 @@ getb64.loadImageUrlArray = (urlArray, cb) => {
 };
 // 图片url处理
 getb64.switchIngUrl = (url) => {
-    if (window.plus && url.includes('static')) {
-        // 测试（pubicPath为空，手动补全）
-        return window.location.origin + window.location.pathname + "/" + url;
-    } else {
-        // 生产 （pubicPath补全了）
-        return url;
-    }
+    return window.location.origin + window.location.pathname + url;
+    // if (window.plus && url.includes('static')) {
+    //     // 测试（pubicPath为空，手动补全）
+    //     return window.location.origin + window.location.pathname + "/" + url;
+    // } else {
+    //     // 生产 （pubicPath补全了）
+    //     return url;
+    // }
 };
 
 export default getb64;

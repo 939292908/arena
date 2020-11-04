@@ -2,16 +2,48 @@ import m from 'mithril';
 import utils from '@/util/utils';
 
 class Router {
-    defaultRoutePath = "/sendRedPacket";
+    defaultRoutePath = "/arena";
     routerList = {
-        // 发红包
-        '/sendRedPacket': {
+        // 竞技场
+        '/arena': {
             // 是否需要需要身份验证
             requireAuth: false,
             onmatch: function () {
-                return import('@/views/page/sendRedPacket/sendRedPacket.view');
+                return import('@/views/page/arena/arena.view');
             }
         },
+        // 排名
+        '/ranking': {
+            // 是否需要需要身份验证
+            requireAuth: false,
+            onmatch: function () {
+                return import('@/views/page/ranking/ranking.view');
+            }
+        },
+        // 竞技场H5分享
+        '/arenaShareH5': {
+            // 是否需要需要身份验证
+            requireAuth: false,
+            onmatch: function () {
+                return import('@/views/page/main/shareH5/arenaShareH5/arenaShareH5.view');
+            }
+        },
+        // 排名H5分享
+        '/rankingShareH5': {
+            // 是否需要需要身份验证
+            requireAuth: false,
+            onmatch: function () {
+                return import('@/views/page/main/shareH5/rankingShareH5/rankingShareH5.view');
+            }
+        },
+        // // 发红包
+        // '/sendRedPacket': {
+        //     // 是否需要需要身份验证
+        //     requireAuth: false,
+        //     onmatch: function () {
+        //         return import('@/views/page/sendRedPacket/sendRedPacket.view');
+        //     }
+        // },
         // 领取红包
         '/receiveRedPacket': {
             // 是否需要需要身份验证

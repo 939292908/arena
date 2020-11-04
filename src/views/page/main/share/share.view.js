@@ -15,11 +15,11 @@ module.exports = {
                     m('img', { src: logic.options.needShareImg, width: '60%' })
                 ]),
                 // 底部分享
-                m('div', { class: `view-share-footer bottom-sheet has-bg-level-2 border-radius-large-2-top` }, [
-                    m('div', { class: `pt-7 has-text-centered has-text-level-3` }, logic.shareMsg),
+                m('div', { class: `view-share-footer bottom-sheet has-bg-level-1 border-radius-large-2-top` }, [
+                    m('div', { class: `pt-7 has-text-centered has-text-level-2` }, logic.shareMsg),
                     m('div', { class: `is-around has-border-bottom-1 has-line-level-1 pa-5` }, logic.shareBtnList().map((item, index) => {
                         return m('button', {
-                            class: `button is-light has-text-centered`,
+                            class: `button has-border-none has-bg-level-1 has-text-centered`,
                             key: index,
                             onclick: e => {
                                 logic.doShare(item);
@@ -33,12 +33,12 @@ module.exports = {
                                 /* <svg class="icon" aria-hidden="true">
                                     <use xlink:href="#icon-xxx"></use>
                                     </svg> */
-                                m('div', { class: `body-4 mt-1` }, item.label)
+                                m('div', { class: `body-4 mt-1 has-text-level-2` }, item.label)
                             ])
                         ]);
                     })),
                     m('button', {
-                        class: `button is-light is-fullwidth has-text-centered button-large`,
+                        class: `button has-border-none has-bg-level-1 has-text-level-1 is-fullwidth has-text-centered button-large`,
                         onclick() {
                             logic.cancelShareBtnClick();
                         }

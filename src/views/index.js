@@ -50,7 +50,7 @@ export default {
     view: function () {
         return m('section.section.container' + (window.themeDark ? " .theme--dark" : " .theme--light"), [
             // m(header),
-            m('div.route-box'),
+            m('div.route-box.has-bg-level-1'),
             // m(footer),
             m(message),
             m(Loading),

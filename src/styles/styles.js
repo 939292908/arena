@@ -1,8 +1,8 @@
 // 主题色
 const primary = Object.freeze({
-    lighten: '#FE871E',
+    lighten: '#EC2021',
 
-    darken: '#FE871E'
+    darken: '#EC2021'
 });
 // 辅助色
 const sub = Object.freeze({
@@ -52,14 +52,14 @@ const sign = Object.freeze({
 });
 // 文字颜色
 const font = Object.freeze({
-    lighten: '#0E2039',
-    lighten1: '#444A5A',
-    lighten2: '#737783',
+    lighten: '#FFFFFF',
+    lighten1: '#97A0B9',
+    lighten2: '#EC2021',
     lighten3: '#A1A4AD',
 
-    darken: '#DEE2E9',
-    darken1: '#96A5BB',
-    darken2: '#747F90',
+    darken: '#FFFFFF',
+    darken1: '#97A0B9',
+    darken2: '#EC2021',
     darken3: '#515965'
 });
 const fontwhite = Object.freeze({
@@ -70,24 +70,24 @@ const fontdark = Object.freeze({
 });
 // 线条颜色
 const line = Object.freeze({
-    lighten: 'rgba(10, 13, 22, 0.04)',
+    lighten: 'rgba(51, 56, 73, 0.4)',
     lighten1: 'rgba(30, 40, 70, 0.08)',
     lighten2: 'rgba(30, 40, 70, 0.12)',
     lighten3: 'rgba(30, 40, 70, 0.16)',
 
-    darken: 'rgba(255, 255, 255, 0.04)',
+    darken: 'rgba(51, 56, 73, 0.4)',
     darken1: 'rgba(255, 255, 255, 0.08)',
     darken2: 'rgba(255, 255, 255, 0.12)',
     darken3: 'rgba(255, 255, 255, 0.16)'
 });
 // 背景颜色
 const background = Object.freeze({
-    lighten: '#F5F6F7',
+    lighten: '#191D28',
     lighten1: '#FFFFFF',
     lighten2: '#FAFBFB',
     lighten3: '#F8F8F9',
 
-    darken: '#09101E',
+    darken: '#191D28',
     darken1: '#0A162B',
     darken2: '#0C1B32',
     darken3: '#0F213B'

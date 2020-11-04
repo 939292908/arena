@@ -1,0 +1,36 @@
+.view-deal-history {
+    
+    .view-deal-history-content {
+
+        .columns {
+            flex-wrap: wrap;
+        }
+        
+        .view-deal-history-title {
+            font-size: 24px;
+        }
+
+        .view-deal-history-item {
+            border-bottom: 1px dashed rgba(51, 56, 73, 0.4);
+
+            .view-deal-history-item-title {
+                font-size: 18px;
+            }
+
+            .view-deal-history-item-btn {
+                height: 26px;
+                line-height: 26px;
+                border-radius: 13px;
+                
+                &.up {
+                    background: rgba(46, 221, 190, 0.12);
+                    color: #2EDDBE;
+                }
+                &.down {
+                    background: rgba(239, 87, 22, 0.12);
+                    color: #EF5716;
+                }
+            }
+        }
+    }
+}

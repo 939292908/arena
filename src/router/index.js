@@ -20,6 +20,14 @@ class Router {
                 return import('@/views/page/ranking/ranking.view');
             }
         },
+        // 历史成交
+        '/dealHistory': {
+            // 是否需要需要身份验证
+            requireAuth: false,
+            onmatch: function () {
+                return import('@/views/page/dealHistory/dealHistory.view');
+            }
+        },
         // 竞技场H5分享
         '/arenaShareH5': {
             // 是否需要需要身份验证

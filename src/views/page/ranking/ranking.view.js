@@ -33,15 +33,18 @@ module.exports = {
                     m('div', { class: `columns is-mobile has-text-level-2` }, [
                         m('div', { class: `column` }, "排名"),
                         m('div', { class: `column` }, "UID"),
-                        m('div', { class: `column` }, "净盈亏(BMUT)")
+                        m('div', { class: `column has-text-right` }, "净盈亏(BMUT)")
                     ]),
                     // 排名列表
                     m('div', { class: `view-ranking-info-body` }, [
                         logic.rankingList.map(item => {
-                            return m('div', { class: `columns is-mobile` }, [
+                            return m('div', { class: `columns is-mobile`, onclick() { logic.rankingItemClick(item); } }, [
                                 m('div', { class: `column` }, item),
                                 m('div', { class: `column` }, "2"),
-                                m('div', { class: `column` }, "3(BMUT)")
+                                m('div', { class: `column has-text-right` }, [
+                                    m('span', { class: `` }, "3(BMUT)"),
+                                    m('img', { class: `pl-2`, src: require("@/assets/img/arena/rightArrow.svg").default, height: "8px" })
+                                ])
                             ]);
                         })
                     ])

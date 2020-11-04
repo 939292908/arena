@@ -46,7 +46,7 @@ module.exports = {
                         m('div', { class: `view-arena-top-barrage mb-6`, id: "my-container" })
                     ]),
                     // 介绍
-                    m('div', { class: `view-arena-info pt-7 px-4` }, [
+                    m('div', { class: `view-arena-info pt-7 px-4 mx-4` }, [
                         m('img.mb-5', { src: require("@/assets/img/arena/logoLine.svg").default, width: "100%" }),
                         // 参赛流程
                         m('div', { class: `has-text-level-3 font-weight-bold mb-5` }, "参赛流程"),

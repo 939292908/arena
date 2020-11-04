@@ -91,6 +91,15 @@ const logic = {
             });
         }
     },
+    // 排名item点击事件
+    rankingItemClick(params) {
+        window.router.push({
+            path: "/dealHistory", // 历史成交
+            data: {
+                id: params //
+            }
+        });
+    },
     // 领取记录 接口
     getgiftrec() {
         const params = {

@@ -5,7 +5,10 @@ const utils = require('@/util/utils').default;
 
 module.exports = {
     view(vnode) {
-        return m('div', { class: `ranking-share-h5 has-bg-level-1 has-text-centered pb-7 pt-8` }, [
+        return m('div', {
+            class: `ranking-share-h5 has-bg-level-1 has-text-centered pb-7 pt-8`,
+            style: `background: url(${require("@/assets/img/arena/rankingShareBgH5.png").default}) center 160px / contain no-repeat #191D28;`
+        }, [
             m('div', { class: `` }, m('img', { src: require("@/assets/img/arena/topTitle.svg").default, width: "281" })),
             m('div', { class: `has-text-level-1 mt-3` }, "快和我一起参赛，盈收益！"),
             m('div', { class: `share-h5-link-box mt-8 mb-7 pa-3 mx-6 border-radius-small` }, [

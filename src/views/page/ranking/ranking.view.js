@@ -12,9 +12,12 @@ module.exports = {
     onremove: vnode => logic.onremove(vnode),
     view(vnode) {
         return m('div', { class: `pub-view view-ranking` }, [
-            m(Loading, { isShow: logic.shareLoading }),
+            m(Loading, logic.loadingOption),
             m(Header, logic.headerOption),
-            m('div', { class: `pub-content view-ranking-content` }, [
+            m('div', {
+                class: `pub-content view-ranking-content`,
+                style: `background: url(${require("@/assets/img/arena/rankingBg.png").default}) no-repeat center top / contain;`
+            }, [
                 // top
                 m('div', { class: `view-ranking-top has-text-centered pt-6` }, [
                     m('div', { class: `view-ranking-top-number font-weight-bold pb-1` }, "TOP50"),
@@ -22,27 +25,28 @@ module.exports = {
                     m('div', { class: `font-weight-bold` }, "完全公开透明，成交记录可查")
                 ]),
                 // 排行
-                m('div', { class: `view-ranking-info pt-7 px-4 is-flex is-flex-direction-column` }, [
+                m('div', { class: `view-ranking-info pt-4 px-4 is-flex is-flex-direction-column` }, [
                     m('img.mb-5', { src: require("@/assets/img/arena/logoLine.svg").default, width: "100%" }),
                     // 我的排名
                     m('div', { class: `is-between mb-3` }, [
-                        m('div', { class: `has-text-level-3` }, "我的排名：未上榜"),
-                        m('div', { class: `has-text-level-3` }, "净盈亏：0.00")
+                        m('div', { class: `has-text-level-3` }, "我的排名：" + (logic.myRank === -1 ? "未上榜" : logic.myRank)),
+                        m('div', { class: `has-text-level-3` }, "净盈亏：" + logic.pnl)
                     ]),
                     // 排名头部
                     m('div', { class: `columns is-mobile has-text-level-2` }, [
                         m('div', { class: `column` }, "排名"),
                         m('div', { class: `column` }, "UID"),
-                        m('div', { class: `column has-text-right` }, "净盈亏(BMUT)")
+                        m('div', { class: `column has-text-right` }, "净盈亏" + `(${logic.coin})`)
                     ]),
                     // 排名列表
                     m('div', { class: `view-ranking-info-body` }, [
                         logic.rankingList.map(item => {
                             return m('div', { class: `columns is-mobile`, onclick() { logic.rankingItemClick(item); } }, [
-                                m('div', { class: `column` }, item),
-                                m('div', { class: `column` }, "2"),
+                                m('div', { class: `column font-weight*bold` }, item.rank + 1),
+                                m('div', { class: `column` }, item.uid),
                                 m('div', { class: `column has-text-right` }, [
-                                    m('span', { class: `` }, "3(BMUT)"),
+                                    m('span', { class: `` }, item.arena),
+                                    // icon
                                     m('img', { class: `pl-2`, src: require("@/assets/img/arena/rightArrow.svg").default, height: "8px" })
                                 ])
                             ]);
@@ -52,9 +56,9 @@ module.exports = {
             ]),
             // 底部
             m('div', { class: `view-ranking-footer py-3 px-5 has-text-centered` }, [
-                m('div', { class: `has-text-level-2 mb-1` }, "*排名数据每一小时刷新"),
+                // m('div', { class: `has-text-level-2 mb-1` }, "*排名数据每一小时刷新"),
                 m(Button, {
-                    class: 'is-primary font-weight-bold',
+                    class: `is-primary font-weight-bold ${window.plus ? "" : "is-hidden"}`,
                     width: 1,
                     label: "分享我的排名",
                     onclick() {

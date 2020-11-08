@@ -20,6 +20,12 @@ export default {
         //         self.themeDark = utils.getItem('themeDark');
         //     }
         // });
+        if (window.plus) {
+            // 设置状态栏颜色
+            window.plus.navigator.setStatusBarBackground('#191D28');
+            // 设置状态栏文字样式
+            window.plus.navigator.setStatusBarStyle('light');
+        }
     },
     oncreate() {
         document.querySelector('body').onclick = () => {

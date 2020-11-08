@@ -7,12 +7,32 @@ const Qrcode = require('qrcode');
 const I18n = require('@/languages/I18n').default;
 const share = require('@/views/page/main/share/share.logic.js');
 const utils = require('@/util/utils').default;
-const Danmaku = require('danmaku').default;
+const config = require('@/config.js');
+const broadcast = require('@/broadcast/broadcast');
 
 const logic = {
-    shareLoading: false,
+    isEnter: false, // 是否报名
+    balance: "", // 当前权益
+    arenaInfo: {
+        start_tm: "", // 活动开始时间,
+        end_tm: "", // 活动结束时间,
+        user_count: "", // 参与人数,
+        bonus_pool: "", // 奖池,
+        bonus_coin: "", // 奖池币种
+        entry_fee: "", // 报名费
+        entry_coin: "", // 报名币种
+        game_currency: "", // 兑换的活动币量
+        game_coin: "", // 兑换的活动币种
+        bound_sym: "" // 跳转交易默认选中合约
+    },
+    // loading
+    loadingOption: {
+        isShow: {
+            loadingShare: false,
+            lodaingGetArena: true
+        }
+    },
     VXNum: "Block-Chain-Yu",
-    danmaku: null, // 弹幕实例
     // 头部 组件配置
     headerOption: {
         left() {
@@ -32,7 +52,29 @@ const logic = {
     },
     // 报名 click
     submit() {
-        logic.confirmModal.updateOption({ isShow: false });
+        Http.arenaEnter().then(arg => {
+            logic.loadingOption.isShow.lodaingGetArena = false;
+            logic.confirmModal.updateOption({ isShow: false });
+            if (arg.result.code === 0) {
+                logic.getArena(); // 获取竞技场相关信息 接口
+                logic.getArenaUserInfo(); // 获取用户信息 接口
+                window.$message({
+                    content: "报名成功",
+                    type: 'success'
+                });
+                console.log('报名 success', arg);
+            } else {
+                window.$message({
+                    content: errCode.getArenaErrorCode(arg.result.code),
+                    type: 'danger'
+                });
+            }
+            m.redraw();
+        }).catch(err => {
+            logic.loadingOption.isShow.lodaingGetArena = false;
+            m.redraw();
+            console.log('报名 error', err);
+        });
     },
     // 分享取消回调
     cancelCallback(params) {
@@ -42,15 +84,15 @@ const logic = {
     },
     // 分享 click
     toShareClick() {
-        if (logic.shareLoading) return;
+        if (logic.loadingOption.isShow.loadingShare) return;
         const param = {
-            link: "www.baidu.com"
+            link: window.location.origin + window.location.pathname + `#!/arena`
         };
         logic.toShare(param);
     },
     // 分享
     toShare(param) {
-        logic.shareLoading = true;
+        logic.loadingOption.isShow.loadingShare = true;
         const link = param.link; // 需要分享的链接
         // 测试/生产线路切换
         const img1 = GetBase64.switchIngUrl(require('@/assets/img/arena/arenaShareBg.png').default);
@@ -87,18 +129,18 @@ const logic = {
                             }
                         }); // 打开分享弹框
                         // logic.reset(); // 重置
-                        logic.shareLoading = false;
+                        logic.loadingOption.isShow.loadingShare = false;
                         m.redraw();
                     });
                 });
             }).catch(err => {
-                logic.shareLoading = false;
+                logic.loadingOption.isShow.loadingShare = false;
                 m.redraw();
                 console.log(err);
             });
         } else {
             // logic.reset(); // 重置
-            logic.shareLoading = false;
+            logic.loadingOption.isShow.loadingShare = false;
             // h5分享
             window.router.push({
                 path: "/arenaShareH5", // h5分享
@@ -114,54 +156,73 @@ const logic = {
             window.$message({ title: I18n.$t('10410') /* '提示' */, content: I18n.$t('20134') /* '复制成功' */, type: 'success' });
         });
     },
-    // 发弹幕
-    sendDanmaku(option) {
-        // user: 用户名 / text: 弹幕
-        var comment = {
-            render() {
-                var $div = document.createElement('div');
-                $div.innerHTML = `
-                    <div class="pub-danmaku px-2 has-text-level-1">
-                        <div class="pub-danmaku-user mr-2 has-bg-primary">${option.user}</div>
-                        <div class="">${option.text}</div>
-                    </div>
-                `;
-                return $div;
-            }
-        };
-        logic.danmaku.emit(comment);
-    },
-    // 领取记录 接口
-    getgiftrec() {
-        const params = {
-            gid: m.route.param().gid
-        };
-        Http.getgiftrec(params).then(arg => {
+    // 用户信息 接口
+    getArenaUserInfo() {
+        if (!utils.getItem('loginState')) return;
+        // logic.loadingOption.isShow.lodaingGetArena = true;
+        Http.getArenaUserInfo().then(arg => {
+            // logic.loadingOption.isShow.lodaingGetArena = false;
             if (arg.result.code === 0) {
-                // 领取记录列表
-                console.log('领取记录 success', arg);
+                logic.isEnter = arg.result.status === 1; // 是否报名
+                logic.balance = arg.result.balance; // 当前权益
+                console.log('获取竞技场用户信息 success', arg);
             } else {
                 window.$message({
-                    content: errCode.getRedPacketErrorCode(arg.result.code),
+                    content: errCode.getArenaErrorCode(arg.result.code),
                     type: 'danger'
                 });
             }
-        }).catch(function(err) {
-            logic.loadingOption.isShow.isShow1 = false;
-            console.log('领取记录 error', err);
+            m.redraw();
+        }).catch(err => {
+            // logic.loadingOption.isShow.lodaingGetArena = false;
+            console.log('获取竞技场用户信息 error', err);
+            m.redraw();
+        });
+    },
+    // 竞技场相关信息 接口
+    getArena() {
+        const params = {
+            data: {
+                vp: config.exchId
+            }
+        };
+        logic.loadingOption.isShow.lodaingGetArena = true;
+        Http.getArena(params).then(arg => {
+            logic.loadingOption.isShow.lodaingGetArena = false;
+            if (arg.result.code === 0) {
+                logic.arenaInfo = arg.result.arena;
+                console.log('获取竞技场相关信息 success', arg);
+            } else {
+                window.$message({
+                    content: errCode.getArenaErrorCode(arg.result.code),
+                    type: 'danger'
+                });
+            }
+            m.redraw();
+        }).catch(err => {
+            logic.loadingOption.isShow.lodaingGetArena = false;
+            console.log('获取竞技场相关信息 error', err);
+            m.redraw();
         });
     },
     oninit(vnode) {
+        logic.getArena(); // 获取竞技场相关信息 接口
+        broadcast.onMsg({
+            key: "arena_GET_USER_INFO_READY",
+            cmd: broadcast.GET_USER_INFO_READY,
+            cb: logic.getArenaUserInfo // 获取用户信息 接口
+        });
     },
     oncreate(vnode) {
-        logic.danmaku = new Danmaku({
-            container: document.getElementById('my-container'),
-            speed: 100
-        });
     },
     onupdate(vnode) {
     },
     onremove(vnode) {
+        broadcast.offMsg({
+            key: "arena_GET_USER_INFO_READY",
+            cmd: broadcast.GET_USER_INFO_READY,
+            isall: true
+        });
     }
 };
 

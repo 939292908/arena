@@ -24,11 +24,11 @@ module.exports = {
                 label: I18n.$t('20030')/* 朋友圈 */,
                 icon: "#icon-shareFriends"
             },
-            {
-                key: "CopyLink",
-                label: I18n.$t('20031')/* 复制链接 */,
-                icon: "#icon-CopyLink"
-            },
+            // {
+            //     key: "CopyLink",
+            //     label: I18n.$t('20031')/* 复制链接 */,
+            //     icon: "#icon-CopyLink"
+            // },
             {
                 key: "savePhoto",
                 label: I18n.$t('20032')/* 保存图片 */,
@@ -95,14 +95,15 @@ module.exports = {
             Share.photo(
                 this.options.needShareImg,
                 arg => {
-                    that.shareMsg = I18n.$t('20034')/* 图片已保存，快去分享给你的好友吧！ */;
+                    that.shareMsg = "保存图片成功"/* 保存图片成功 */;
+                    window.$message({ content: '保存图片成功', type: 'success' });
                     m.redraw();
                     window.clearTimeout(that.timeoutId);
                     that.timeoutId = window.setTimeout(() => {
                         that.shareMsg = "";
                         m.redraw();
                     }, 3000);
-                    // that.cancelShareBtnClick();
+                    that.cancelShareBtnClick();
                 },
                 err => {
                     console.log('err', err);

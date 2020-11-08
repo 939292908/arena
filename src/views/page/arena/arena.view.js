@@ -4,8 +4,9 @@ const logic = require('./arena.logic');
 const Header = require('@/views/components/common/Header/Header.view');
 const Button = require('@/views/components/common/Button/Button.view');
 const Modal = require('@/views/components/common/Modal/Modal.view');
-// const Danmaku = require('Danmaku');
 const Loading = require('@/views/components/common/Loading/Loading.view');
+const utils = require('@/util/utils').default;
+const danmaku = require('@/views/components/danmaku/danmaku.view');
 
 module.exports = {
     oninit: vnode => logic.oninit(vnode),
@@ -14,39 +15,29 @@ module.exports = {
     onremove: vnode => logic.onremove(vnode),
     view(vnode) {
         return m('div', { class: `pub-view view-arena` }, [
-            m(Loading, { isShow: logic.shareLoading }),
+            m(Loading, logic.loadingOption),
             m(Header, logic.headerOption),
             m('div', { class: `pub-content view-arena-content` }, [
-                m('div', { class: `view-arena-content-inner` }, [
+                m('div', {
+                    class: `view-arena-content-inner`,
+                    style: `background: url(${require("@/assets/img/arena/bg.png").default}) no-repeat center top / contain;`
+                }, [
                     // top
                     m('div', { class: `view-arena-top has-text-centered pt-3` }, [
                         m('img', { src: require("@/assets/img/arena/hatchet.svg").default, width: "31", height: "24" }),
                         m('div', { class: `my-2` }, m('img', { src: require("@/assets/img/arena/topTitle.svg").default, width: "281" })),
                         m('div', { class: `font-weight-bold` }, "默默做单无人知 一战成名天下闻"),
-                        m('div', { class: `my-2 has-text-level-3 font-weight-bold` }, "实时总奖池 (USDT)"),
-                        m('div', { class: `view-arena-top-number font-weight-bold` }, "68888"),
+                        m('div', { class: `my-2 has-text-level-3 font-weight-bold` }, `实时总奖池 (${logic.arenaInfo.bonus_coin})`),
+                        m('div', { class: `view-arena-top-number font-weight-bold` }, logic.arenaInfo.bonus_pool),
                         m('div', { class: `font-weight-bold` }, [
                             m('span', { class: `` }, "实时报名人数 "),
-                            m('span', { class: `` }, "1,888,888")
+                            m('span', { class: `` }, logic.arenaInfo.user_count)
                         ]),
-                        m('div', {
-                            class: ``,
-                            onclick () {
-                                logic.sendDanmaku({
-                                    user: "z",
-                                    text: "我是弹幕额额额"
-                                });
-                            }
-                        }, ["弹幕按钮"]),
                         // 弹幕
-                        // m('div', { class: `pub-danmaku px-2 has-text-level-1` }, [
-                        //     m('div', { class: `pub-danmaku-user mr-2 has-bg-primary` }, "F"),
-                        //     m('div', { class: `` }, "我是弹幕！")
-                        // ]),
-                        m('div', { class: `view-arena-top-barrage mb-6`, id: "my-container" })
+                        m(danmaku, { class: `view-arena-top-barrage mb-6` })
                     ]),
                     // 介绍
-                    m('div', { class: `view-arena-info pt-7 px-4 mx-4` }, [
+                    m('div', { class: `view-arena-info pt-4 px-4 mx-4` }, [
                         m('img.mb-5', { src: require("@/assets/img/arena/logoLine.svg").default, width: "100%" }),
                         // 参赛流程
                         m('div', { class: `has-text-level-3 font-weight-bold mb-5` }, "参赛流程"),
@@ -54,12 +45,12 @@ module.exports = {
                             // 流程1
                             m('div', { class: `view-arena-info-line-box pl-4 pb-7 line-box-pass` }, [
                                 m('span', { class: `` }, "1.报名竞技场"),
-                                m('span', { class: `body-2` }, "（仅需1USDT）")
+                                m('span', { class: `body-2` }, `（仅需${logic.arenaInfo.entry_fee}${logic.arenaInfo.entry_coin}）`)
                             ]),
                             // 流程2
                             m('div', { class: `view-arena-info-line-box pl-4 pb-7 line-box-pass` }, [
                                 m('span', { class: `` }, "2.竞技场开赛"),
-                                m('span', { class: `body-2` }, "（2020/11/11 - 14:00-2020/11/26 14:00）")
+                                m('span', { class: `body-2` }, `（${utils.formatDate(logic.arenaInfo.start_tm, 'yyyy/MM/dd hh:mm')} - ${utils.formatDate(logic.arenaInfo.end_tm, 'yyyy/MM/dd hh:mm')}）`)
                             ]),
                             // 流程3
                             m('div', { class: `view-arena-info-line-box pl-4 pb-7 line-box-pass` }, [
@@ -75,19 +66,19 @@ module.exports = {
                         // 竞技规则
                         m('div', { class: `has-text-level-3 font-weight-bold mb-5` }, "竞技规则"),
                         m('div', { class: `has-text-level-2 mb-5` }, [
-                            m('div', { class: `` }, "1.参赛人员仅需1usdt报名费用，报名费投入总奖池。"),
-                            m('div', { class: `` }, "2.每报名一人，平台额外投入1usdt进入总奖池。"),
+                            m('div', { class: `` }, `1.参赛人员仅需${logic.arenaInfo.entry_fee}${logic.arenaInfo.entry_coin}报名费用，报名费投入总奖池。`),
+                            m('div', { class: `` }, `2.每报名一人，平台额外投入${logic.arenaInfo.entry_fee}${logic.arenaInfo.entry_coin}进入总奖池。`),
                             m('div', { class: `` }, "3.竞技结束，按照净盈亏排名，根据名次获得巨额奖励。")
                         ]),
                         // 复活规则
                         m('div', { class: `has-text-level-3 font-weight-bold mb-5` }, "复活规则"),
                         m('div', { class: `has-text-level-2 mb-5` }, [
-                            m('div', { class: `` }, "1.账户金额低于10000UT（初始值）可申请复活，每人最多2次复活机会。"),
+                            m('div', { class: `` }, `1.账户金额低于${logic.arenaInfo.game_currency}${logic.arenaInfo.game_coin}（初始值）可申请复活，每人最多2次复活机会。`),
                             m('div', { class: `` }, "2.第一次复活需邀请2人完成报名，第二次复活需邀请8人完成报名。"),
                             m('div', { class: `` }, "3.邀请完成后，添加复活小助手微信申请即可。")
                         ]),
                         // 复活小助手
-                        m('div', { class: `has-text-centered font-weight-bold` }, "复活小助手"),
+                        m('div', { class: `has-text-centered font-weight-bold`, id: "resurgence" }, "复活小助手"),
                         m('div', { class: `view-arena-resurrection pa-2 my-3` }, [
                             m('img', { src: require("@/assets/img/arena/resurrection.svg").default, width: "100%", height: "100%" })
                         ]),
@@ -107,16 +98,28 @@ module.exports = {
                     // 悬浮toolbar
                     m('div', { class: `view-arena-toolbar mr-3` }, [
                         m('div', { class: `view-arena-toolbar-item has-bg-primary mb-3`, onclick() { logic.toShareClick(); } }, "分享"),
-                        m('div', { class: `view-arena-toolbar-item has-bg-primary mb-3` }, "奖励"),
+                        m('div', { class: `view-arena-toolbar-item has-bg-primary mb-3`, onclick() { window.open('https://www.bmex.vip/hc/zh-cn/articles/360058797113'); } }, "奖励"),
                         m('div', {
                             class: `view-arena-toolbar-item has-bg-primary`,
                             onclick() {
-                                window.router.push({
-                                    path: "/ranking",
-                                    data: {
-                                        id: 123456
+                                if (!utils.getItem('loginState')) {
+                                    if (window.plus) {
+                                        utils.setItem("ARENA_CLOSE", {
+                                            code: 2, // 去登录
+                                            data: {
+                                                link: "/m/arena/#!/ranking"
+                                            }
+                                        });
+                                        window.plus.webview.close(window.plus.webview.currentWebview(), "auto", 1, { abc: "我是竞技场！！" });
+                                    } else {
+                                        window.open(window.location.origin + '/m/#/trade');
                                     }
-                                });
+                                } else {
+                                    // 跳转排名
+                                    window.router.push({
+                                        path: "/ranking"
+                                    });
+                                }
                             }
                         }, "排名")
                     ]),
@@ -128,7 +131,7 @@ module.exports = {
                             // 头部
                             m('div', { class: `my-confirm-modal-header font-weight-bold mb-3` }, "确认报名"),
                             // 内容
-                            m('div', { class: `my-confirm-modal-body has-text-level-2` }, "支付1USDT后将获得初始模拟金10000BMUT，此资金将进入您的合约账户。"),
+                            m('div', { class: `my-confirm-modal-body has-text-level-2` }, `支付${logic.arenaInfo.entry_fee}${logic.arenaInfo.entry_coin}后将获得初始模拟金${logic.arenaInfo.game_currency}${logic.arenaInfo.game_coin}，此资金将进入您的合约账户。`),
                             // 底部
                             m('div', { class: `my-confirm-modal-footer font-weight-bold is-flex` }, [
                                 m('div', { class: `spacer` }),
@@ -157,7 +160,18 @@ module.exports = {
     },
     // 底部
     getFooter() {
-        const type = 1;
+        let type = 0;
+
+        if (new Date() > logic.arenaInfo.end_tm) {
+            // 活动结束
+            type = 3;
+        } else {
+            // 未登录
+            if (utils.getItem('loginState')) {
+                type = logic.isEnter ? 2 : 1;
+            }
+        }
+
         switch (type) {
         // 马上登录
         case 0:
@@ -166,6 +180,17 @@ module.exports = {
                 width: 1,
                 label: "马上登录报名",
                 onclick() {
+                    if (window.plus) {
+                        utils.setItem("ARENA_CLOSE", {
+                            code: 2, // 去登录
+                            data: {
+                                link: "/m/arena/#!/arena"
+                            }
+                        });
+                        window.plus.webview.close(window.plus.webview.currentWebview(), "auto", 1, { abc: "我是竞技场！！" });
+                    } else {
+                        window.open('/m/#/userLogin', '_self');
+                    }
                 }
             });
 
@@ -174,7 +199,7 @@ module.exports = {
             return m(Button, {
                 class: 'is-primary font-weight-bold',
                 width: 1,
-                label: "立即报名 仅需 1 USDT",
+                label: `立即报名 仅需${logic.arenaInfo.entry_fee}${logic.arenaInfo.entry_coin}`,
                 onclick() {
                     logic.confirmModal.updateOption({ isShow: true });
                 }
@@ -185,24 +210,49 @@ module.exports = {
             return m('div', { class: `columns is-mobile font-weight-bold` }, [
                 m(Button, {
                     class: 'is-primary column',
-                    label: "100000 BMUT",
-                    onclick() {
-                    }
+                    label: logic.balance + logic.arenaInfo.game_coin,
+                    onclick() {}
                 }),
                 m(Button, {
                     class: 'is-primary column mx-3',
                     label: "立即参赛",
                     onclick() {
+                        if (window.plus) {
+                            utils.setItem("ARENA_CLOSE", {
+                                code: 1, // 去参赛交易
+                                data: {
+                                    Sym: logic.arenaInfo.bound_sym
+                                }
+                            });
+                            window.plus.webview.close(window.plus.webview.currentWebview(), "auto", 1, { abc: "我是竞技场！！" });
+                        } else {
+                            window.open(window.location.origin + '/m/#/trade');
+                        }
                     }
                 }),
                 m(Button, {
                     class: 'is-primary column',
                     label: "我要复活",
                     onclick() {
+                        utils.ScrollTop({
+                            number: 1000,
+                            time: 400,
+                            dom: document.querySelector('.view-arena-content')
+                        });
                     }
                 })
             ]);
 
+        // 竞技已结束
+        case 3:
+            return m(Button, {
+                class: 'is-primary font-weight-bold',
+                width: 1,
+                disabled: true,
+                label: `竞技已结束`,
+                onclick() {
+                }
+            });
         default:
             break;
         }

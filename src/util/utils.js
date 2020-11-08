@@ -433,5 +433,52 @@ utils.copyText = function(txt, success) {
 //             vm.$t('11066', {value: seconds}/*{value}秒*/);
 //     }
 // };
+utils.getSet = function(key) {
+    try {
+        return JSON.parse(window.localStorage.getItem(key));
+    } catch (e) {
+        return false;
+    }
+};
+// ----------------------- 竞技场 -----------------------
+// 滚动指点位置动画
+// option = {
+//     number: 0, // 滚动距离
+//     time: 0, // 用时(默认0秒)
+//     dom: null, // 滚动容器(默认body)
+//     spacingTime: 20, // 循环间隔时间(默认20)
+// };
+utils.ScrollTop = option => {
+    // 滚动到目标用时
+    const time = option.time || 0;
+    // 循环间隔时间
+    const spacingTime = option.spacingTime || 20;
+    // dom滚动容器
+    const dom = option.dom || null;
+    // 设置dom滚动条距离 fn
+    const setScrollTop = (num, dom) => {
+        if (dom) {
+            dom.scrollTop = num;
+        } else {
+            document.body.scrollTop = document.documentElement.scrollTop = num;
+        }
+    };
+    // 循环次数
+    let spacingInex = Math.ceil(time / spacingTime);
+    // 循环设置dom滚动条
+    const timerID = setInterval(() => {
+        // 获取当前滚动条位置
+        const nowTop = document.body.scrollTop + document.documentElement.scrollTop + (dom ? dom.scrollTop : 0);
+        // 每次循环滑动距离
+        const everyTop = (option.number - nowTop) / spacingInex;
+        // 单次设置滚动条
+        if (spacingInex > 0) {
+            spacingInex--;
+            setScrollTop(nowTop + everyTop, dom);
+        } else {
+            clearInterval(timerID); // 清除计时器
+        }
+    }, spacingTime);
+};
 
 export default utils;

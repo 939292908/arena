@@ -32,11 +32,11 @@ Http.interceptors.response.use(function (response) {
     if (response.headers['set-exsession']) {
         utils.setItem("ex-session", response.headers['set-exsession']);
     }
-    if (response.data.result ? response.data.result.code === 9003 : false) {
+    if (response.data.result ? (response.data.result.code === 9003 || response.data.result.code === 1001) : false) {
         utils.removeItem("ex-session");
         utils.setItem('loginState', false);
         globalModels.setAccount({});
-        window.router.push('/login');
+        // window.open('/m/#/userLogin', '_self');
     }
     return response.data;
 }, function (error) {

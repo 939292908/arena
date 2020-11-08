@@ -12,11 +12,10 @@ module.exports = {
                 m('div', {
                     class: `view-share-content has-text-centered scroll-y`
                 }, [
-                    m('img', { src: logic.options.needShareImg, width: '60%' })
+                    m('img', { src: logic.options.needShareImg, width: '70%' })
                 ]),
                 // 底部分享
                 m('div', { class: `view-share-footer bottom-sheet has-bg-level-1 border-radius-large-2-top` }, [
-                    m('div', { class: `pt-7 has-text-centered has-text-level-2` }, logic.shareMsg),
                     m('div', { class: `is-around has-border-bottom-1 has-line-level-1 pa-5` }, logic.shareBtnList().map((item, index) => {
                         return m('button', {
                             class: `button has-border-none has-bg-level-1 has-text-centered`,

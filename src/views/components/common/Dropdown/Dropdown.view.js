@@ -37,7 +37,7 @@ module.exports = {
                         logic.getHeader(vnode), // 内容
                         m('i', { class: `my-trigger-icon iconfont icon-xiala iconfont-min has-text-primary` }) // icon
                     ],
-                    class: `button has-text-level-1 ${vnode.attrs.btnClass || ''}`,
+                    class: `button has-bg-level-1 has-text-level-2 ${vnode.attrs.btnClass || ''}`,
                     style: (vnode.attrs.btnWidth ? `width:${vnode.attrs.btnWidth}px;` : '') +
                         (vnode.attrs.btnHeight ? `height:${vnode.attrs.btnHeight}px;` : ''),
                     onclick() {
@@ -61,11 +61,11 @@ module.exports = {
                 class: "dropdown-menu",
                 style: (vnode.attrs.menuWidth ? `width:${vnode.attrs.menuWidth}px;` : '')
             }, [
-                m('div', { class: "dropdown-content", style: (vnode.attrs.menuHeight ? `max-height:${vnode.attrs.menuHeight}px;` : '') },
+                m('div', { class: "dropdown-content has-bg-level-1", style: (vnode.attrs.menuHeight ? `max-height:${vnode.attrs.menuHeight}px;` : '') },
                     // list
                     vnode.attrs.menuList().map((item, index) => {
                         return m('a', {
-                            class: `dropdown-item has-hover ${vnode.attrs.currentId === item.id ? 'has-active' : ''}`,
+                            class: `dropdown-item has-text-level-2 has-hover ${vnode.attrs.currentId === item.id ? 'has-active' : ''}`,
                             key: item.id + index,
                             onclick () {
                                 logic.menuClick(item, vnode); // click

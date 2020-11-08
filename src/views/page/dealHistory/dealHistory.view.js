@@ -19,6 +19,9 @@ module.exports = {
             return isBuy ? "买入开多" : "卖出开空";
         }
         if (item.SzCls !== 0 && (Math.abs(item.Sz) === Math.abs(item.SzCls))) {
+            return isBuy ? "买入平空" : "卖出平多";
+        }
+        if (item.SzCls !== 0 && (Math.abs(item.Sz) !== Math.abs(item.SzCls))) {
             return isBuy ? "买入平空并开多" : "卖出平多并开空";
         }
         if (item.Via === 4 || item.Via === 13) {

@@ -9,6 +9,8 @@ const share = require('@/views/page/main/share/share.logic.js');
 const utils = require('@/util/utils').default;
 const config = require('@/config.js');
 const broadcast = require('@/broadcast/broadcast');
+const transferLogic = require('@/views/components/transfer/transfer.logic');
+const models = require('@/models');
 
 const logic = {
     isEnter: false, // 是否报名
@@ -25,6 +27,7 @@ const logic = {
         game_coin: "", // 兑换的活动币种
         bound_sym: "" // 跳转交易默认选中合约
     },
+    timerId: "",
     // loading
     loadingOption: {
         isShow: {
@@ -50,8 +53,28 @@ const logic = {
             Object.keys(option).forEach(key => (this[key] = option[key]));
         }
     },
+    // 划转确认弹框
+    confirmTransferModal: {
+        isShow: false, // 状态
+        updateOption(option) {
+            Object.keys(option).forEach(key => (this[key] = option[key]));
+        },
+        confirmClick() {
+            this.updateOption({ isShow: false });
+            transferLogic.updateOption({
+                isShow: true,
+                coin: logic.arenaInfo.entry_coin // 报名币种
+            });
+        }
+    },
     // 报名 click
     submit() {
+        console.log("---------", transferLogic.myWalletMax, logic.arenaInfo.entry_fee);
+        if (transferLogic.myWalletMax < logic.arenaInfo.entry_fee) {
+            logic.confirmModal.updateOption({ isShow: false });
+            logic.confirmTransferModal.updateOption({ isShow: true });
+            return;
+        }
         Http.arenaEnter().then(arg => {
             logic.loadingOption.isShow.lodaingGetArena = false;
             logic.confirmModal.updateOption({ isShow: false });
@@ -157,11 +180,8 @@ const logic = {
         });
     },
     // 用户信息 接口
-    getArenaUserInfo() {
-        if (!utils.getItem('loginState')) return;
-        // logic.loadingOption.isShow.lodaingGetArena = true;
+    getArenaUserInfoApi() {
         Http.getArenaUserInfo().then(arg => {
-            // logic.loadingOption.isShow.lodaingGetArena = false;
             if (arg.result.code === 0) {
                 logic.isEnter = arg.result.status === 1; // 是否报名
                 logic.balance = arg.result.balance; // 当前权益
@@ -174,10 +194,17 @@ const logic = {
             }
             m.redraw();
         }).catch(err => {
-            // logic.loadingOption.isShow.lodaingGetArena = false;
             console.log('获取竞技场用户信息 error', err);
             m.redraw();
         });
+    },
+    // 获取用户信息
+    getArenaUserInfo() {
+        if (!utils.getItem('loginState')) return;
+        logic.getArenaUserInfoApi();
+        logic.timerId = setInterval(() => {
+            logic.getArenaUserInfoApi();
+        }, 60000); // 300000
     },
     // 竞技场相关信息 接口
     getArena() {
@@ -191,6 +218,10 @@ const logic = {
             logic.loadingOption.isShow.lodaingGetArena = false;
             if (arg.result.code === 0) {
                 logic.arenaInfo = arg.result.arena;
+                // 更新划转中的币种，用于设置钱包该币种最大可是否够报名
+                transferLogic.updateOption({
+                    coin: logic.arenaInfo.entry_coin // 报名币种
+                });
                 console.log('获取竞技场相关信息 success', arg);
             } else {
                 window.$message({
@@ -207,10 +238,14 @@ const logic = {
     },
     oninit(vnode) {
         logic.getArena(); // 获取竞技场相关信息 接口
+        models.getUserInfo();
         broadcast.onMsg({
             key: "arena_GET_USER_INFO_READY",
             cmd: broadcast.GET_USER_INFO_READY,
-            cb: logic.getArenaUserInfo // 获取用户信息 接口
+            cb: () => {
+                console.log(5555555);
+                logic.getArenaUserInfo(); // 获取用户信息 接口
+            }
         });
     },
     oncreate(vnode) {
@@ -223,6 +258,7 @@ const logic = {
             cmd: broadcast.GET_USER_INFO_READY,
             isall: true
         });
+        clearInterval(logic.timerId);
     }
 };
 

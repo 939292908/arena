@@ -7,7 +7,6 @@ const Qrcode = require('qrcode');
 // const I18n = require('@/languages/I18n').default;
 const share = require('@/views/page/main/share/share.logic.js');
 const utils = require('@/util/utils').default;
-const config = require('@/config.js');
 const cryptoChar = require('@/util/cryptoChar');
 const globalModels = require('@/models/globalModels');
 
@@ -24,6 +23,11 @@ const logic = {
             lodaingGetArenaUserInfo: true
         }
     },
+    initLoadingOption() {
+        logic.loadingOption.isShow.loadingShare = false;
+        logic.loadingOption.isShow.lodaingGetArenaRank = true;
+        logic.loadingOption.isShow.lodaingGetArenaUserInfo = true;
+    },
     // 头部 组件配置
     headerOption: {
         left() {
@@ -38,10 +42,6 @@ const logic = {
     rankingList: [],
     // 分享 click
     toShareClick() {
-        // window.$message({
-        //     content: window.plus + "---" + window.$params,
-        //     type: 'danger'
-        // });
         const param = {};
         if (window.plus) {
             const uid = globalModels.getAccount().uid;
@@ -69,14 +69,20 @@ const logic = {
         if (window.plus) {
             Qrcode.toDataURL(link).then(base64 => {
                 GetBase64.loadImageUrlArray([img1, img2, base64], arg => {
+                    if (arg === -1) {
+                        return window.$message({
+                            content: "loading img error!",
+                            type: 'danger'
+                        });
+                    }
                     GetBase64.getWebView({
                         data: HtmlConst.shareRanking(
                             [
                                 "合约大师竞技场",
                                 logic.myRank === -1 ? "再接再厉，勇夺第一" : "他强任他强，我是合约王",
                                 "我的排名",
-                                logic.myRank === -1 ? "未上榜" : logic.myRank,
-                                `净盈亏(${logic.arenaInfo.game_coin})`,
+                                logic.myRank === -1 ? "未上榜" : (logic.myRank),
+                                `净盈亏(${logic.coin})`,
                                 utils.toFixedForFloor(logic.pnl, 0),
                                 "邀请您加入，长按识别二维码"
                             ],
@@ -179,38 +185,14 @@ const logic = {
             m.redraw();
         });
     },
-    // 竞技场相关信息 接口
-    getArena() {
-        const params = {
-            data: {
-                vp: config.exchId
-            }
-        };
-        logic.loadingOption.isShow.lodaingGetArena = true;
-        Http.getArena(params).then(arg => {
-            logic.loadingOption.isShow.lodaingGetArena = false;
-            if (arg.result.code === 0) {
-                logic.arenaInfo = arg.result.arena;
-                console.log('获取竞技场相关信息 success', arg);
-            } else {
-                window.$message({
-                    content: errCode.getArenaErrorCode(arg.result.code),
-                    type: 'danger'
-                });
-            }
-            m.redraw();
-        }).catch(err => {
-            logic.loadingOption.isShow.lodaingGetArena = false;
-            console.log('获取竞技场相关信息 error', err);
-            m.redraw();
-        });
-    },
     oninit(vnode) {
         logic.timerID = setInterval(() => {
             logic.getArenaRank();// 排名 接口
-        }, 300000);
+            logic.getArenaUserInfo();
+        }, 60000); // 300000
         logic.getArenaRank();// 排名 接口
         logic.getArenaUserInfo();
+        logic.initLoadingOption();
     },
     oncreate(vnode) {
     },

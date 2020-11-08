@@ -30,7 +30,7 @@ const logic = {
     tempHistoryList: [],
     buildHistoryList(data) {
         const newList = data.map(item => {
-            item.build_Sym = item.Sym.replace(".", " / ") + "永续";
+            item.build_Sym = item.Sym.replace(".", " / ").split("@")[0] + "永续";
             item.build_At = utils.formatDate(item.At, 'MM/dd hh:mm:ss');
             item.build_Sz = Math.abs(item.Sz);
             // console.log(999, item.Sym, Object.values(gMktApi.AssetD).find(item2 => item2.Sym === "BTC.BTC"));

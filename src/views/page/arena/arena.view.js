@@ -7,6 +7,7 @@ const Modal = require('@/views/components/common/Modal/Modal.view');
 const Loading = require('@/views/components/common/Loading/Loading.view');
 const utils = require('@/util/utils').default;
 const danmaku = require('@/views/components/danmaku/danmaku.view');
+const transfer = require('@/views/components/transfer/transfer.view');
 
 module.exports = {
     oninit: vnode => logic.oninit(vnode),
@@ -112,7 +113,7 @@ module.exports = {
                                         });
                                         window.plus.webview.close(window.plus.webview.currentWebview(), "auto", 1, { abc: "我是竞技场！！" });
                                     } else {
-                                        window.open(window.location.origin + '/m/#/trade');
+                                        window.open('/m/#/userLogin', '_self');
                                     }
                                 } else {
                                     // 跳转排名
@@ -149,13 +150,42 @@ module.exports = {
                                 }, "报名")
                             ])
                         ])
+                    }),
+                    // 划转确认弹框
+                    m(Modal, {
+                        isShow: logic.confirmTransferModal.isShow, // 显示隐藏
+                        updateOption: logic.confirmTransferModal.updateOption,
+                        content: m('div', { class: `my-confirm-modal-content pa-3 border-radius-small` }, [
+                            // 头部
+                            m('div', { class: `my-confirm-modal-header font-weight-bold mb-3` }, "温馨提示"),
+                            // 内容
+                            m('div', { class: `my-confirm-modal-body has-text-level-2` }, `钱包可用资产不足，是否划转资金至钱包账户？`),
+                            // 底部
+                            m('div', { class: `my-confirm-modal-footer font-weight-bold is-flex` }, [
+                                m('div', { class: `spacer` }),
+                                m('div', {
+                                    class: `has-text-level-2 pa-2 mr-7`,
+                                    onclick() {
+                                        logic.confirmTransferModal.updateOption({ isShow: false });
+                                    }
+                                }, "取消"),
+                                m('div', {
+                                    class: `has-text-primary pa-2`,
+                                    onclick() {
+                                        logic.confirmTransferModal.confirmClick();
+                                    }
+                                }, "确定")
+                            ])
+                        ])
                     })
                 ])
             ]),
             // 底部
             m('div', { class: `view-arena-footer py-3` }, [
                 vnode.state.getFooter()
-            ])
+            ]),
+            // 划转 Modal
+            m(transfer)
         ]);
     },
     // 底部
@@ -166,12 +196,12 @@ module.exports = {
             // 活动结束
             type = 3;
         } else {
-            // 未登录
+            // 登录
             if (utils.getItem('loginState')) {
                 type = logic.isEnter ? 2 : 1;
             }
         }
-
+        // type = 1;
         switch (type) {
         // 马上登录
         case 0:

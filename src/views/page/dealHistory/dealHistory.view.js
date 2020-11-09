@@ -3,6 +3,7 @@ require('./dealHistory.scss');
 const logic = require('./dealHistory.logic');
 const Header = require('@/views/components/common/Header/Header.view');
 const Loading = require('@/views/components/common/Loading/Loading.view');
+const utils = require('@/util/utils').default;
 
 module.exports = {
     oninit: vnode => logic.oninit(vnode),
@@ -12,8 +13,11 @@ module.exports = {
     // 获取 方向和交易类型
     getDir(item) {
         const isBuy = item.Sz >= 0; // 方向是否是买入
-        if (item.SzCls === 0 && item.SzOpn === 0) {
-            return isBuy ? "买入" : "卖出";
+        if (item.Via === 4 || item.Via === 13) {
+            return isBuy ? "买入强制平空" : "卖出强制平多";
+        }
+        if (item.Via === 5) {
+            return isBuy ? "买入ADL平空" : "卖出ADL平多";
         }
         if (item.SzCls === 0 && item.SzOpn !== 0) {
             return isBuy ? "买入开多" : "卖出开空";
@@ -24,11 +28,8 @@ module.exports = {
         if (item.SzCls !== 0 && (Math.abs(item.Sz) !== Math.abs(item.SzCls))) {
             return isBuy ? "买入平空并开多" : "卖出平多并开空";
         }
-        if (item.Via === 4 || item.Via === 13) {
-            return isBuy ? "买入强制平空" : "卖出强制平多";
-        }
-        if (item.Via === 5) {
-            return isBuy ? "买入ADL平空" : "卖出ADL平多";
+        if (item.SzCls === 0 && item.SzOpn === 0) {
+            return isBuy ? "买入" : "卖出";
         }
     },
     view(vnode) {
@@ -50,7 +51,7 @@ module.exports = {
                             m('div', { class: `view-deal-history-item-btn font-weight-bold ${item.Sz < 0 ? 'down' : 'up'} mr-3 px-3` }, vnode.state.getDir(item)),
                             // 杠杆
                             m('div', { class: `view-deal-history-item-btn font-weight-bold ${item.Sz < 0 ? 'down' : 'up'} px-3` }, [
-                                item.Lvr === 0 ? ("全仓" + 1 / item.MIRMy + "x") : ("逐仓" + item.Lvr + "x")
+                                item.Lvr === 0 ? ("全仓" + utils.toFixedForFloor(1 / item.MIRMy, 0) + "x") : ("逐仓" + item.Lvr + "x")
                             ])
                         ]),
                         // info
